@@ -71,6 +71,7 @@ jobs:
 
     # Apply Terraform deployment
     - name: Apply Terraform
+      working-directory: ./terraform
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
         TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}

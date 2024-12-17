@@ -1,5 +1,4 @@
-variable "lambda_function_name" { default = "
-jll-conference-scheduler-function" }
+variable "lambda_function_name" { default = "jll-conference-scheduler-function" }
 variable "lambda_runtime"       { default = "java11" }
 variable "lambda_handler"       {}
 variable "s3_bucket"            {}
