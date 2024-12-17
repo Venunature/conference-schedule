@@ -17,7 +17,6 @@ terraform {
 module "lambda" {
   source         = "./modules/lambda"
   function_name  = var.lambda_function_name
-  runtime        = var.lambda_runtime
   handler        = var.lambda_handler
   role_arn       = module.iam.role_arn
   s3_bucket      = var.lib_bucket

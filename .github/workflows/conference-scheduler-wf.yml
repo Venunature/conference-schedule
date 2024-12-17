@@ -54,12 +54,19 @@ jobs:
       run: terraform init
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
-        TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
+        TF_VAR_jar_s3_key: ${{ vars.JAR_S3_KEY }}
+        TF_VAR_lambda_function_name: ${{ vars.LAMBA_FUNCTION_NAME }}
+        TF_VAR_lambda_handler: ${{ vars.LAMBDA_HANDLER }}
 
     # Validate Terraform configuration
     - name: Validate Terraform
       working-directory: ./terraform
       run: terraform validate
+      env:
+        TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
+        TF_VAR_jar_s3_key: ${{ vars.JAR_S3_KEY }}
+        TF_VAR_lambda_function_name: ${{ vars.LAMBA_FUNCTION_NAME }}
+        TF_VAR_lambda_handler: ${{ vars.LAMBDA_HANDLER }}
 
     # Plan Terraform deployment
     - name: Plan Terraform
@@ -67,12 +74,16 @@ jobs:
       run: terraform plan
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
-        TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
+        TF_VAR_jar_s3_key: ${{ vars.JAR_S3_KEY }}
+        TF_VAR_lambda_function_name: ${{ vars.LAMBA_FUNCTION_NAME }}
+        TF_VAR_lambda_handler: ${{ vars.LAMBDA_HANDLER }}
 
     # Apply Terraform deployment
     - name: Apply Terraform
       working-directory: ./terraform
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
-        TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
+        TF_VAR_jar_s3_key: ${{ vars.JAR_S3_KEY }}
+        TF_VAR_lambda_function_name: ${{ vars.LAMBA_FUNCTION_NAME }}
+        TF_VAR_lambda_handler: ${{ vars.LAMBDA_HANDLER }}
       run: terraform apply -auto-approve
