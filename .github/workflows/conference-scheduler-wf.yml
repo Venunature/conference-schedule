@@ -61,7 +61,7 @@ jobs:
 
     # Plan Terraform deployment
     - name: Plan Terraform
-      run: terraform plan -out=tfplan
+      run: terraform plan
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
         TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
@@ -71,4 +71,4 @@ jobs:
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
         TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
-      run: terraform apply -auto-approve tfplan
+      run: terraform apply -auto-approve
