@@ -50,6 +50,7 @@ jobs:
 
     # Initialize Terraform
     - name: Initialize Terraform
+      working-directory: ./terraform
       run: terraform init
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
@@ -57,10 +58,12 @@ jobs:
 
     # Validate Terraform configuration
     - name: Validate Terraform
+      working-directory: ./terraform
       run: terraform validate
 
     # Plan Terraform deployment
     - name: Plan Terraform
+      working-directory: ./terraform
       run: terraform plan
       env:
         TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
