@@ -12,6 +12,14 @@ public class Talk {
         this.duration = duration;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
     public LocalTime getSchedule() {
         return schedule;
     }

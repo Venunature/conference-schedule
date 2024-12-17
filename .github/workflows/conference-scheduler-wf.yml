@@ -27,5 +27,48 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Test run
+      run: mvn test
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+    - name: Setup AWS
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Upload JAR to S3
+      run: |
+          aws s3 cp target/${{ vars.JAR_NAME }} s3://${{ vars.S3_LIB_BKT }}/${{ vars.JAR_S3_KEY }}
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.0
+
+    # Initialize Terraform
+    - name: Initialize Terraform
+      run: terraform init
+      env:
+        TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
+        TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
+
+    # Validate Terraform configuration
+    - name: Validate Terraform
+      run: terraform validate
+
+    # Plan Terraform deployment
+    - name: Plan Terraform
+      run: terraform plan -out=tfplan
+      env:
+        TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
+        TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
+
+    # Apply Terraform deployment
+    - name: Apply Terraform
+      env:
+        TF_VAR_lib_bucket: ${{ vars.S3_LIB_BKT }}
+        TF_VAR_s3_bucket_key: ${{ vars.JAR_S3_KEY }}
+      run: terraform apply -auto-approve tfplan

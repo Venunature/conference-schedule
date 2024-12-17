@@ -1,10 +1,13 @@
 package com.conference.schedule;
 
+import com.conference.schedule.exceptions.NumberInTitleException;
 import org.joda.time.DateTime;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConferenceSchedulerService {
 
@@ -12,22 +15,41 @@ public class ConferenceSchedulerService {
     static final int AFTERNOON_SESSION_MIN = 180;
     static final int AFTERNOON_SESSION_MAX = 240;
 
-    public List<String> schedule(List<String> input) {
+//    public List<String> schedule(List<String> input) {
+//        List<Talk> talks = parseInput(input);
+//        List<Track> tracks = createTracks(talks);
+//        return formatOutput(tracks);
+//    }
+
+    public List<Track> schedule(List<String> input) throws NumberInTitleException {
         List<Talk> talks = parseInput(input);
         List<Track> tracks = createTracks(talks);
-        return formatOutput(tracks);
+        return tracks;
     }
 
-    private List<Talk> parseInput(List<String> input) {
+    private List<Talk> parseInput(List<String> input) throws NumberInTitleException {
         List<Talk> talks = new ArrayList<>();
+        String regex = "^[^\\d]*\\d+min$"; // Regex to check if numbers appear more than once
+        Pattern  pattern = Pattern.compile(regex);
+        Matcher  matcher;
         for (String line : input) {
             int duration;
-            if (line.endsWith("lightning")) {
-                duration = 5;
-            } else {
+            String talkName="";
+            matcher = pattern.matcher(line);
+            if (!matcher.matches() || line.endsWith("lightning")){
+                if (line.endsWith("lightning")) {
+                    talkName.replace(" lightning", "");
+                    duration = 5;
+                }else {
+                    throw new NumberInTitleException("Title is not in correct format");
+                }
+            }
+            else {
+                talkName=line.replace(line.replaceAll("\\D+", ""),"");
+                talkName=talkName.substring(0,talkName.length()-4);
                 duration = Integer.parseInt(line.replaceAll("\\D+", ""));
             }
-            talks.add(new Talk(line, duration));
+            talks.add(new Talk(talkName, duration));
         }
         return talks;
     }
