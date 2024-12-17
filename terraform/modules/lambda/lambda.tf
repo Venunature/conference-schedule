@@ -32,9 +32,7 @@ resource "aws_lambda_function" "lambda_function" {
   s3_key        = var.s3_key
 
   environment {
-    variables = var.lambda_env_vars
   }
-
   # Memory and timeout (optional)
   memory_size      = var.memory_size
   timeout          = var.timeout

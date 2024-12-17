@@ -18,7 +18,6 @@ module "lambda" {
   source         = "./modules/lambda"
   lambda_function_name  = var.lambda_function_name
   lambda_handler = var.lambda_handler
-  role_arn       = module.iam.role_arn
   s3_bucket      = var.lib_bucket
   s3_key         = var.jar_s3_key
 }
