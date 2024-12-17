@@ -45,3 +45,8 @@ resource "aws_lambda_permission" "apigw_permission" {
   function_name = aws_lambda_function.lambda_function.arn
   principal     = "apigateway.amazonaws.com"
 }
+
+output "function_arn" {
+  description = "The ARN of the Lambda function"
+  value       = aws_lambda_function.lambda_function.arn
+}
